@@ -5,7 +5,7 @@ Topic 1:- From zero to GitOps with AKS
 - Intro of K8s
   - Why K8s etc
 - GitOps
-- What is it?
+  - What is it?
   - More than than just a buzzword
 - AKS Deployment with TF/Bicep/CLI - Bicep preferable
 - AKS security/Azure Policy
