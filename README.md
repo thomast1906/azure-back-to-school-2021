@@ -12,6 +12,7 @@ Topic 1:- From zero to GitOps with AKS
 - GitOps
   - Fluxv2
   - Helm
+  - Kustomize
   - Renovate
 - Benefits of GitOps
   - Brings infra closer to dev
