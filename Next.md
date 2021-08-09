@@ -1,4 +1,6 @@
 # KC need to gather:
 
-* AKS Bicep Deployment Resources - modularise!
+* AKS Deployment scripting - modularise!
+  * Bicep?
+  * Azure CLI?
 * AKS Security Best Practices (inc. Azure Policy)
