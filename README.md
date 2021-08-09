@@ -1,23 +1,7 @@
 # azure-back-to-school-2021
 
-Topic 1:- From zero to GitOps with AKS (1 hour in total - slides & video/demo etc)
 
-
-- AKS Deployment with TF/Bicep/CLI - Bicep preferable
-- AKS security/Azure Policy
-- GitOps
-  - Fluxv2
-  - Helm
-  - Kustomize
-  - Renovate
-- Benefits of GitOps
-  - Brings infra closer to dev
-- All this in pipeline(s) etc (automated)
-Demo of old helm charts etc to show the benefits of helm/renovate/flux!
-
-
-####################################################
-Topic:- From zero to GitOps with AKS (1 hour in total - slides & video/demo etc)
+## Topic:- From zero to GitOps with AKS (1 hour in total - slides & video/demo etc)
 
 ## SlideDeck
 
