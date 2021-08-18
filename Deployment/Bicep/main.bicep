@@ -18,7 +18,9 @@
 targetScope = 'subscription'
 
 param secEnvironment string = 'security'
-param customer string = 'azback2shcool'
+param environment string
+param location string = 'northeurope'
+param resourcePrefix string = 'azback2shcool'
 
 param vnets array = [
   {
@@ -56,3 +58,18 @@ param prodSubnets array = [
     ipAddressRange: '10.99.99.0/26'
   }
 ]
+
+param resourceGroups array = [
+  'security'
+  'aks-prod'
+  'aks-nodes-prod'
+  'aks-accept'
+  'aks-nodes-accept'
+  'aks-test'
+  'aks-nodes-test'
+]
+
+resource NewRG 'Microsoft.Resources/resourceGroups@2020-06-01' = [for name in resourceGroups: {
+  name: 'rg-${resourcePrefix}-${name}'
+  location: location
+}]
