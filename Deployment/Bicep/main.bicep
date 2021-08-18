@@ -15,3 +15,44 @@
 //    Log Analytics/Container Insights
 //    Azure Container Registry
 
+targetScope = 'subscription'
+
+param secEnvironment string = 'security'
+param customer string = 'azback2shcool'
+
+param vnets array = [
+  {
+    name: 'vnet-${customer}-${secEnvironment}'
+    addressSpace: '10.99.0.0/16'
+  }
+  {
+    name: 'vnet-${customer}-production'
+    addressSpace: '10.0.0.0/16'
+  }
+  {
+    name: 'vnet-${customer}-accept'
+    addressSpace: '10.1.0.0/16'
+  }
+  {
+    name: 'vnet-${customer}-test'
+    addressSpace: '10.2.0.0/16'
+  }
+]
+
+param secSubnets array = [
+  {
+    name: 'AzureFirewallSubnet'
+    ipAddressRange: '10.99.99.0/26'
+  }
+]
+
+param prodSubnets array = [
+  {
+    name: 'snet-${customer}-aks'
+    ipAddressRange: '10.99.99.0/26'
+  }
+  {
+    name: 'snet-${customer}-backend'
+    ipAddressRange: '10.99.99.0/26'
+  }
+]
