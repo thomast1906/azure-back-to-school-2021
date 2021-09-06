@@ -1,0 +1,60 @@
+  parameters:
+    variableGroupName: 'azure-back-to-school-2021'
+
+  jobs:
+    - job: azcli_resourcegroup_create
+      variables:
+      - group: ${{ parameters.variableGroupName }}
+      steps:
+            - task: AzureCLI@2
+              displayName: 'BootStrap AKS Cluster'
+              inputs:
+                azureSubscription: 'thomasthorntoncloud'
+                scriptType: bash
+                scriptLocation: inlineScript
+                addSpnToEnvironment: true
+                inlineScript: |
+                  #!/usr/bin/env bash
+                  set -x
+
+                  AKS_RG="azureback2schoolaks-rg"
+                  AKS_NAME="azureback2schoolaks"
+                  CLUSTER_ENV=00
+                  CLUSTER="production"
+                  FLUX_CONFIG_URL=https://raw.githubusercontent.com/thomast1906/azure-back-to-school-2021-flux/main
+
+                  # Get AKS Credentials
+                  az aks get-credentials -g $AKS_RG -n $AKS_NAME --admin
+
+                  # For AAD Pod Identity
+                  kubectl create -f https://raw.githubusercontent.com/Azure/aad-pod-identity/master/deploy/infra/deployment-rbac.yaml 
+
+                  # Install Flux
+                  kubectl apply -f ${FLUX_CONFIG_URL}/apps/flux-system/base/gotk-components.yaml
+                  kubectl apply -f ${FLUX_CONFIG_URL}/apps/flux-system/base/flux-config-gitrepo.yaml
+
+                  # Set secret
+                  kubectl -n flux-system create secret generic flux-git-details --from-literal=username=thomast1906 --from-literal=password=$(GITHUBTOKEN)
+
+                  # Install Kustomize 
+                  curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+
+                  TMP_DIR=/tmp/flux/${CLUSTER}/${CLUSTER_ENV}
+                  mkdir -p $TMP_DIR
+                  # -----------------------------------------------------------
+                  (
+                  cat <<EOF
+                  apiVersion: kustomize.config.k8s.io/v1beta1
+                  kind: Kustomization
+                  namespace: flux-system
+                  resources:
+                      - ${FLUX_CONFIG_URL}/apps/flux-system/base/kustomize.yaml
+                  patchesStrategicMerge:
+                    - ${FLUX_CONFIG_URL}/apps/flux-system/${CLUSTER}/${CLUSTER_ENV}/kustomize.yaml
+                  EOF
+                  ) > "${TMP_DIR}/kustomization.yaml"
+                  # -----------------------------------------------------------
+
+                  kustomize build ${TMP_DIR} |  kubectl apply -f -
+
+                  rm -rf kustomize
