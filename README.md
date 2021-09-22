@@ -1,4 +1,4 @@
-# aFrom zero to GitOps with AKS
+# Fom zero to GitOps with AKS
 
 ### Setup
 - Run first https://github.com/thomast1906/azure-back-to-school-2021/blob/main/run_first.sh 
